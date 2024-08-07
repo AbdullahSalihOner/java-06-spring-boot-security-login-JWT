@@ -64,16 +64,21 @@ public class AuthController {
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
+    // we set the authentication object in the SecurityContext from spring security
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
+    // we get the user details from the authentication object
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
+    // we generate a JWT token and set it in the response cookie with user details
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
+    // we assign the roles of user to List of Strings to be returned in the response
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())
         .collect(Collectors.toList());
 
+    // we return the user details and the JWT token in the response
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
         .body(new UserInfoResponse(userDetails.getId(),
                                    userDetails.getUsername(),
@@ -138,7 +143,9 @@ public class AuthController {
   // http://localhost:8090/api/auth/signout
   @PostMapping("/signout")
   public ResponseEntity<?> logoutUser() {
+    // we clear the JWT token from the response cookie
     ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+    // we return a message to the user
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
         .body(new MessageResponse("You've been signed out!"));
   }
