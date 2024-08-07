@@ -20,6 +20,8 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtils {
+
+  // we logged this class with the logger
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
   @Value("${salih.app.jwtSecret}")
@@ -40,22 +42,32 @@ public class JwtUtils {
     }
   }
 
+
+  // we can use this method to generate a new JWT token and set it in a cookie, we set the cookie path to /api
+  // and set the max age to 24 hours, and we set the cookie to be httpOnly to prevent XSS attacks
   public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
     String jwt = generateTokenFromUsername(userPrincipal.getUsername());
     ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
     return cookie;
   }
 
+  // we can use this method to get a clean JWT cookie, we set the cookie value to null
   public ResponseCookie getCleanJwtCookie() {
     ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
     return cookie;
   }
 
+  // we can use this method to get the username from the JWT token
   public String getUserNameFromJwtToken(String token) {
-    return Jwts.parserBuilder().setSigningKey(key()).build()
-               .parseClaimsJws(token).getBody().getSubject();
+    return Jwts.parserBuilder()
+            .setSigningKey(key())
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .getSubject();
   }
 
+  // we decode the secret key from the application.properties file
   private Key key() {
     return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
   }
@@ -77,6 +89,8 @@ public class JwtUtils {
     return false;
   }
 
+  // we can use this method to generate a new JWT token from the username
+  //this is main method to generate token
   public String generateTokenFromUsername(String username) {   
     return Jwts.builder()
                .setSubject(username)
