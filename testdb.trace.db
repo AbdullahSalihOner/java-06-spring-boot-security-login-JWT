@@ -1,0 +1,8 @@
+2024-08-07 15:40:28 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]Selct * from roles"; expected "SAVEPOINT, SCRIPT, SHUTDOWN, SHOW"; SQL statement:
+Selct * from roles [42001-214]
+2024-08-07 15:53:53 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-214]
+2024-08-07 15:56:28 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM USER_ROLES USERS [*]ROLES"; SQL statement:
+SELECT * FROM USER_ROLES USERS ROLES [42000-214]
