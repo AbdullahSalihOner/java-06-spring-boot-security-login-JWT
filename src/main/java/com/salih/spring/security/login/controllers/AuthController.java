@@ -37,7 +37,7 @@ import com.salih.spring.security.login.security.services.UserDetailsImpl;
 // http://localhost:8090/api/auth
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-//for Angular Client (withCredentials)
+//for  React Vue Angular Client (withCredentials)
 //@CrossOrigin(origins = "http://localhost:8081", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
